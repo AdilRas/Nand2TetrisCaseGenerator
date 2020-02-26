@@ -1,4 +1,6 @@
 from src.TestCaseGenerator import *
+import pathlib
+import os
 
 input_variables = [Var("a", 1, "B"), Var("b", 1, "B")]
 output_variables = [Var("out", 1, "B")]
@@ -13,6 +15,8 @@ def and_logic(args):
     return out
 
 
-generate(name="And", numCases=10, inVars=input_variables, outVars=output_variables, function=and_logic)
+generate(name="And", numCases=10, inVars=input_variables, outVars=output_variables, function=and_logic,
+         directory=str(pathlib.Path(__file__).parent.parent / 'output') + os.sep
+         )
 
 

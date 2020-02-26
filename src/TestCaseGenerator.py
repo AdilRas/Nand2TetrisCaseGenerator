@@ -156,13 +156,6 @@ def generateCmpFile(name, caseValues, inVars, outVars, function, directory):
 
 # This is the only function that should be called
 def generate(name, numCases, inVars, outVars, function, directory=""):
-    if directory.count("\\") > 0:
-        print("Invalid filepath. Do not use '\\' characters in filepaths. Only '/' is allowed")
-        return
-    if directory != "":
-        if not directory.endswith("/"):
-            directory = directory + "/"
-
     # Generate test data
     caseText, caseValues = generateCases(numCases, inVars)
     # Generate .tst
