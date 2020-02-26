@@ -108,10 +108,15 @@ def printCases(file, caseText):
         file.write(case)
 
 
-def generateTstFile(name, caseText, inVars, outVars):
-    with open(name+".tst", "w") as file:
-        printTstHeader(name, file, inVars, outVars)
-        printCases(file, caseText)
+def generateTstFile(name, caseText, inVars, outVars, directory):
+    try:
+        with open(directory+name+".tst", "w") as file:
+            printTstHeader(name, file, inVars, outVars)
+            printCases(file, caseText)
+    except FileNotFoundError:
+        print("Could not open or create file. Please check your filepath and try again: " + directory + name + ".tst")
+    except:
+        print("Error when opening file: " + directory + name + ".tst")
 
 
 def evaluate(caseValues, function):
@@ -136,19 +141,33 @@ def printCompares(file, inVars, outVars, caseValues, results):
         file.write("|" + line + "|\n")
 
 
-def generateCmpFile(name, caseValues, inVars, outVars, function):
-    with open(name + ".cmp", "w") as file:
-        printCmpHeader(name, file, inVars, outVars)
-        results = evaluate(caseValues, function)
-        printCompares(file, inVars, outVars, caseValues, results)
+def generateCmpFile(name, caseValues, inVars, outVars, function, directory):
+    try:
+        with open(directory + name + ".cmp", "w") as file:
+            printCmpHeader(file, inVars, outVars)
+            results = evaluate(caseValues, function)
+            printCompares(file, inVars, outVars, caseValues, results)
+    except FileNotFoundError:
+        print("Could not open or create file. Please check your filepath and try again: " + directory + name + ".cmp")
+    except:
+        print("Error when opening file: " + directory + name + ".cmp")
 
 
-def generate(name, numCases, inVars, outVars, function):
+
+# This is the only function that should be called
+def generate(name, numCases, inVars, outVars, function, directory=""):
+    if directory.count("\\") > 0:
+        print("Invalid filepath. Do not use '\\' characters in filepaths. Only '/' is allowed")
+        return
+    if directory != "":
+        if not directory.endswith("/"):
+            directory = directory + "/"
+
     # Generate test data
     caseText, caseValues = generateCases(numCases, inVars)
     # Generate .tst
-    generateTstFile(name, caseText, inVars, outVars)
+    generateTstFile(name, caseText, inVars, outVars, directory)
     # Generate .cmp
-    generateCmpFile(name, caseValues, inVars, outVars, function)
+    generateCmpFile(name, caseValues, inVars, outVars, function, directory)
 
 
